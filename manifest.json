@@ -1,0 +1,14 @@
+{
+   "background_page": "background.html",
+   "description": "Makes it easy to login as another user.  Maintains the page currently being viewed.",
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDBG1f3cgtVvwvp7ZWX2RkZrrtLzTqUk8TMpZnD3Mi5ejYwxRHBt7f8uQ90CYe1P6mnf2LHNmX2BwWHE6gySt+t74ADt5OL+kL9uFxiguM86U/UM85GCankbK/CDGEVQ9GBNFuOjq/+lHgGS+2gWupZ6mtpw8AzDcmE4i3Ei7fb9QIDAQAB",
+   "name": "Salesforce.com Quick Login As",
+   "page_action": {
+      "default_icon": "icon.png",
+      "default_title": "Quickly Login As Another User",
+      "popup": "popup.html"
+   },
+   "permissions": [ "tabs", "https://*.salesforce.com/", "https://*.visual.force.com" ],
+   "update_url": "http://clients2.google.com/service/update2/crx",
+   "version": "1.3"
+}

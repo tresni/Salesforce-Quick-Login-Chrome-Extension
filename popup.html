@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<style>
+		body { padding: 0 15px 0 0; }
+		body, input, select { font-family: arial; font-size: 12px; }
+		a { color: #000000; text-decoration: none; }
+		img, input { display: none; }
+		a#toggleAllColumns { text-decoration: underline; }
+		
+		/* table styles */
+		table { border: 1px solid #CCC; border-collapse: collapse; }
+		th { text-align: left; }
+		.numericalColumn { text-align: right; }
+		tr.headerRow th { white-space: nowrap; background-color: #cfeef8; padding: 4px 5px 4px 5px; border: 1px solid #DFDADC; border-size: 0 0 1px 1px; font-size: 11px; background: url('grid_headerbg.gif') repeat-x; background-position: 0px 100%; }
+		td.actionColumn { white-space: nowrap; }
+		td.actionColumn a { color: #015BA7; text-decoration: none; font-weight: normal; }
+		td.actionColumn a.loginLink:hover { text-decoration: underline; cursor: pointer; }
+		tr.dataRow td, tr.dataRow th { padding: 4px 5px 4px 5px; border: 1px solid #D4DADC; border-width: 0 0 1px 0; }		
+		td a, th a { cursor: default; }
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
+	<script>
+		var sTabURL = "";
+		var sDomain = "";
+		$(function()
+		{
+			chrome.tabs.getSelected(null, function(tab) {
+				handleSelectedTab(tab.url);
+			});
+
+			function handleSelectedTab(_TabURL) {
+			  sTabURL = _TabURL;
+			  sDomain = sTabURL.substring(0, sTabURL.indexOf(".com")+4);
+			  RequestUsers("");
+			}
+			
+			function RequestUsers(sViewId)
+			{
+				var sFilter = (sViewId != "") ? "fcf="+sViewId+"&" : "";
+				var sUsersPage = sDomain+"/005?"+sFilter+"rowsperpage=1000";
+				$.get(sUsersPage, function(data)
+				{
+					DisplayUsers(data);
+				});
+			}
+			
+			function DisplayUsers(data)
+			{
+				var $ddlView = $("select#fcf", data);
+				$ddlView.attr("onchange", "");
+				$("#viewDropdown").empty().append($ddlView);
+				$ddlView.change(function()
+				{
+					$("#loading").show();					
+					RequestUsers($(this).val());
+				});
+				
+				var $table = $("div.setupBlock table.list", data);
+				//only show first x columns?
+				$("tr", $table).each(function(){
+				   $(this).children(':gt(6)').hide();
+				});
+				//button to show all columns
+				$("#toggleAllColumns").click(function()
+				{
+					$("tr th, tr td", $table).show();
+					return false;
+				});
+				$("#users").empty().append($table);
+				
+				//handle login links
+				$("td.actionColumn a:contains('Login')", $table).each(function()
+				{					
+					$login = $(this);
+					
+					//flag the login links and remove other action cell elements (edit link, checkbox)
+					$login.addClass("loginLink")
+					.parent().addClass("loginRow").html("").append($login);
+					
+					//update login url to set target and return URL to the current url
+					var sLogin = $login.attr("href");
+					//strip off the retURL and targetURL
+					sLogin = sDomain + sLogin.substring(0, sLogin.indexOf("&retURL="));
+					sLogin += "&retURL="+encodeURI(sTabURL)+"&targetURL="+encodeURI(sTabURL);
+					$login.attr("href", sLogin);
+				})
+				.click(function()
+				{
+					//update the main browser tab (not the popup) and make the main browser tab
+					//active which will close the popup
+					chrome.tabs.update(null, {url: $(this).attr("href"), active: true});
+					return false;
+				});
+				
+				//clear out action column for users that didn't have login link
+				$("td.actionColumn:not('.loginRow')").empty();
+				
+				//disable all links except login link
+				$("a:not('.loginLink')", $table).click(function()
+				{
+					return false;
+				});
+				
+				$("#loading").hide();
+				$("#views, #users").show();
+				
+				//set width of table to try and prevent the popup from squishing the table
+				$("body").width("800");
+				$table.width($table.outerWidth());
+				$("body").width("auto");
+			}
+		});
+
+	</script>
+  </head>
+  <body>	
+	<span id="views" style="display: none;">View: <span id="viewDropdown"></span> <a href="#" id="toggleAllColumns">Show All Columns</a></span> 
+	<span id="loading">Loading...</span>
+	<div id="users" style="display: none;"></div>
+  </body>
+</html>
