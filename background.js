@@ -5,7 +5,7 @@ function checkForValidUrl(tabId, changeInfo, tab) {
 	//cs13.salesforce.com
 	//company.my.salesforce.com
 	//emea.salesforce.com
-	if (tab.url.match(/(ap|eu|na|cs|emea|.*\.my)[0-9]*\.salesforce.com/) !== null) {
+	if (tab.url.match(/(ap|eu|na|cs|emea|.*\.my)[0-9]*\.(visual\.force\.com|salesforce.com)/) !== null) {
 		chrome.pageAction.show(tabId);
 	}
 }

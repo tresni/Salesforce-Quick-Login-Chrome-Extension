@@ -32,6 +32,10 @@
 			function handleSelectedTab(_TabURL) {
 			  sTabURL = _TabURL;
 			  sDomain = sTabURL.substring(0, sTabURL.indexOf(".com")+4);
+			  if (sDomain.match(/\.visual\.force\.com/)) {
+			  	sDomain = sDomain.match(/[^.]+\.([^.]+)\.visual\.force\.com/);
+			  	sDomain = "https://" + sDomain[1] + ".salesforce.com";
+			  }
 			  RequestUsers("");
 			}
 			
