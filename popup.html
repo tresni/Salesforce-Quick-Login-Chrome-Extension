@@ -6,7 +6,7 @@
 		body, input, select { font-family: arial; font-size: 12px; }
 		a { color: #000000; text-decoration: none; }
 		img, input { display: none; }
-		a#toggleAllColumns { text-decoration: underline; }
+		a#toggleAllColumns, a#toggleAllUsers { text-decoration: underline; }
 		
 		/* table styles */
 		table { border: 1px solid #CCC; border-collapse: collapse; }
@@ -18,6 +18,7 @@
 		td.actionColumn a.loginLink:hover { text-decoration: underline; cursor: pointer; }
 		tr.dataRow td, tr.dataRow th { padding: 4px 5px 4px 5px; border: 1px solid #D4DADC; border-width: 0 0 1px 0; }		
 		td a, th a { cursor: default; }
+		.off { display: none; }
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
 	<script>
@@ -48,6 +49,14 @@
 					DisplayUsers(data);
 				});
 			}
+
+			function HideColumns($table) {
+				//only show first x columns?
+				$("tr", $table).each(function(){
+					// use a class so we can hide these while toggling rows on/off
+					$(this).children(':gt(6)').addClass('off');
+				});
+			}
 			
 			function DisplayUsers(data)
 			{
@@ -61,14 +70,28 @@
 				});
 				
 				var $table = $("div.setupBlock table.list", data);
-				//only show first x columns?
-				$("tr", $table).each(function(){
-				   $(this).children(':gt(6)').hide();
-				});
+				HideColumns($table);
 				//button to show all columns
 				$("#toggleAllColumns").click(function()
 				{
-					$("tr th, tr td", $table).show();
+					// Make this a toggle
+					if($(".off").length > 0) {
+						$(".off").removeClass('off');
+						$(this).text("Some Columns");
+					} else {
+						HideColumns($table);
+						$(this).text("All Columns");
+					}
+					return false;
+				});
+				$("#toggleAllUsers").click(function()
+				{
+					$("td.actionColumn:not('.loginRow')").parent().toggle();
+					if ($('#toggleAllUsers:contains("Login")').length > 0) {
+						$(this).text("All Users");
+					} else {
+						$(this).text("Login Users");
+					}
 					return false;
 				});
 				$("#users").empty().append($table);
@@ -120,7 +143,7 @@
 	</script>
   </head>
   <body>	
-	<span id="views" style="display: none;">View: <span id="viewDropdown"></span> <a href="#" id="toggleAllColumns">Show All Columns</a></span> 
+	<span id="views" style="display: none;">View: <span id="viewDropdown"></span> Show: <a href="#" id="toggleAllColumns">All Columns</a> &bull; <a href="#" id="toggleAllUsers">All Users</a></span> 
 	<span id="loading">Loading...</span>
 	<div id="users" style="display: none;"></div>
   </body>
