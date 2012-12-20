@@ -97,8 +97,9 @@
 					return false;
 				});
 				
+				//Hide users who we can't login as and
 				//clear out action column for users that didn't have login link
-				$("td.actionColumn:not('.loginRow')").empty();
+				$("td.actionColumn:not('.loginRow')").empty().parent().hide();
 				
 				//disable all links except login link
 				$("a:not('.loginLink')", $table).click(function()
