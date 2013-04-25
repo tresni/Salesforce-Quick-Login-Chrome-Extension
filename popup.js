@@ -133,7 +133,7 @@ $(function()
         });
         
         $("#loading").hide();
-        $("#views, #users").show();
+        $("#menu, #users").show();
         
         //set width of table to try and prevent the popup from squishing the table
         $("body").width("800");
