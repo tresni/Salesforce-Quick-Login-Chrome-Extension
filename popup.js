@@ -50,7 +50,7 @@ $(function()
     
     function RequestUsers(sViewId)
     {
-        var sFilter = (sViewId != "") ? "fcf="+sViewId+"&" : "";
+        var sFilter = (sViewId !== "") ? "fcf="+sViewId+"&" : "";
         var sUsersPage = sDomain+"/005?"+sFilter+"rowsperpage=1000";
         $.get(sUsersPage, function(data)
         {

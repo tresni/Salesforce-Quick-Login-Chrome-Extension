@@ -11,6 +11,5 @@
       "default_popup": "popup.html"
    },
    "permissions": [ "tabs", "https://*.salesforce.com/", "https://*.visual.force.com/" ],
-   "update_url": "http://clients2.google.com/service/update2/crx",
    "version": "1.4"
 }
