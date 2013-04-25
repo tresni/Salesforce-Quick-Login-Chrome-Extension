@@ -85,13 +85,16 @@ $(function()
         $("#viewDropdown").empty().append($ddlView);
         $ddlView.change(function()
         {
+            // When we select a new set of users, clear the display
+            $("#users").empty();
             $("#loading").show();                   
             RequestUsers($(this).val());
         });
         
         var $table = $("div.setupBlock table.list", data);
         HideColumns($table);
-        $("#users").empty().append($table);
+
+        $("#users").append($table);
         
         //handle login links
         $("td.actionColumn a:contains('Login')", $table).each(function()
