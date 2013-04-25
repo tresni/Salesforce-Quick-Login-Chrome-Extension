@@ -55,6 +55,16 @@ $(function()
         $.get(sUsersPage, function(data)
         {
             html = (new DOMParser()).parseFromString(data, "text/html");
+            $("img, #allBox", html).remove();
+            // Removing the attributes prevents some errors in the console
+            $("tr", html).removeAttr('onblur').removeAttr('onmouseout').
+                removeAttr('onfocus').removeAttr('onmouseover').not(':first').hover(
+                    function() {
+                        $(this).addClass('highlight');
+                    },
+                    function() {
+                        $(this).removeClass('highlight');
+                    });
             DisplayUsers(html);
         });
     }
@@ -70,7 +80,8 @@ $(function()
     function DisplayUsers(data)
     {
         var $ddlView = $("select#fcf", data);
-        $ddlView.attr("onchange", "");
+        // Removing the attribute prevents some errors in the console
+        $ddlView.removeAttr("onchange");
         $("#viewDropdown").empty().append($ddlView);
         $ddlView.change(function()
         {
