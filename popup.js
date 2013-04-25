@@ -8,7 +8,6 @@ $(function()
     });
 
     function handleSelectedTab(_TabURL) {
-      console.log("handleSelectedTab");
       sTabURL = _TabURL;
       sDomain = sTabURL.substring(0, sTabURL.indexOf(".com")+4);
       if (sDomain.match(/\.visual\.force\.com/)) {
@@ -20,19 +19,16 @@ $(function()
     
     function RequestUsers(sViewId)
     {
-        console.log("RequestUsers");
         var sFilter = (sViewId != "") ? "fcf="+sViewId+"&" : "";
         var sUsersPage = sDomain+"/005?"+sFilter+"rowsperpage=1000";
         $.get(sUsersPage, function(data)
         {
             html = (new DOMParser()).parseFromString(data, "text/html");
-            console.log(html);
             DisplayUsers(html);
         });
     }
 
     function HideColumns($table) {
-        console.log("HideColumns");
         //only show first x columns?
         $("tr", $table).each(function(){
             // use a class so we can hide these while toggling rows on/off
@@ -42,7 +38,6 @@ $(function()
     
     function DisplayUsers(data)
     {
-        console.log("DisplayUsers");
         var $ddlView = $("select#fcf", data);
         $ddlView.attr("onchange", "");
         $("#viewDropdown").empty().append($ddlView);
