@@ -7,6 +7,37 @@ $(function()
         handleSelectedTab(tab.url);
     });
 
+    // Moved these out of the DisplayUsers() as new jQuery
+    // will bind multiple click events causing odd behavior
+    // for every other view selected...
+
+    //button to show all columns
+    $("#toggleAllColumns").click(function()
+    {
+        // Make this a toggle
+        if($(".off").length > 0) {
+            $(".off").removeClass('off');
+            $(this).text("Some Columns");
+        } else {
+            HideColumns($("table.list"));
+            $(this).text("All Columns");
+        }
+        return false;
+    });
+
+    $("#toggleAllUsers").click(function()
+    {
+        console.log("click");
+        if ($('#toggleAllUsers:contains("Login")').length > 0) {
+            $("td.actionColumn:not('.loginRow')").parent().hide();
+            $(this).text("All Users");
+        } else {
+            $("td.actionColumn:not('.loginRow')").parent().show();
+            $(this).text("Login Users");
+        }
+        return false;
+    });
+
     function handleSelectedTab(_TabURL) {
       sTabURL = _TabURL;
       sDomain = sTabURL.substring(0, sTabURL.indexOf(".com")+4);
@@ -49,29 +80,6 @@ $(function()
         
         var $table = $("div.setupBlock table.list", data);
         HideColumns($table);
-        //button to show all columns
-        $("#toggleAllColumns").click(function()
-        {
-            // Make this a toggle
-            if($(".off").length > 0) {
-                $(".off").removeClass('off');
-                $(this).text("Some Columns");
-            } else {
-                HideColumns($table);
-                $(this).text("All Columns");
-            }
-            return false;
-        });
-        $("#toggleAllUsers").click(function()
-        {
-            $("td.actionColumn:not('.loginRow')").parent().toggle();
-            if ($('#toggleAllUsers:contains("Login")').length > 0) {
-                $(this).text("All Users");
-            } else {
-                $(this).text("Login Users");
-            }
-            return false;
-        });
         $("#users").empty().append($table);
         
         //handle login links
@@ -101,6 +109,8 @@ $(function()
         //Hide users who we can't login as and
         //clear out action column for users that didn't have login link
         $("td.actionColumn:not('.loginRow')").empty().parent().hide();
+        $("#toggleAllUsers").text("All Users");
+        $("#toggleAllColumns").text("All Columns");
         
         //disable all links except login link
         $("a:not('.loginLink')", $table).click(function()
