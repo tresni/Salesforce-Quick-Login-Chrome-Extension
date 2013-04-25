@@ -73,7 +73,9 @@ $(function()
         //only show first x columns?
         $("tr", $table).each(function(){
             // use a class so we can hide these while toggling rows on/off
-            $(this).children(':gt(6)').addClass('off');
+            // This should show name, email and action buttons (if you use
+            // a standard layout)
+            $(this).children(':gt(3)').addClass('off');
         });
     }
     
